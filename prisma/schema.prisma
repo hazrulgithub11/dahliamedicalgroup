@@ -1,0 +1,75 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum OrderStatus {
+  NEW
+  PREPARING
+  READY
+  COMPLETED
+  REJECTED
+}
+
+model Clinic {
+  id      String  @id @default(cuid())
+  name    String
+  address String
+  orders  Order[]
+}
+
+model Patient {
+  id      String          @id @default(cuid())
+  name    String
+  phone   String
+  repeats PatientRepeat[]
+  orders  Order[]
+}
+
+model Medicine {
+  id       String          @id @default(cuid())
+  name     String
+  strength String
+  repeats  PatientRepeat[]
+  items    OrderItem[]
+}
+
+model PatientRepeat {
+  id         String   @id @default(cuid())
+  patientId  String
+  medicineId String
+  patient    Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  medicine   Medicine @relation(fields: [medicineId], references: [id], onDelete: Restrict)
+
+  @@unique([patientId, medicineId])
+}
+
+model Order {
+  id           String      @id @default(cuid())
+  displayId    Int         @unique @default(autoincrement())
+  patientId    String
+  clinicId     String
+  status       OrderStatus
+  preferredAt  DateTime
+  rejectReason String?
+  readyAt      DateTime?
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  patient      Patient     @relation(fields: [patientId], references: [id], onDelete: Restrict)
+  clinic       Clinic      @relation(fields: [clinicId], references: [id], onDelete: Restrict)
+  items        OrderItem[]
+}
+
+model OrderItem {
+  id         String   @id @default(cuid())
+  orderId    String
+  medicineId String
+  name       String
+  strength   String
+  order      Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  medicine   Medicine @relation(fields: [medicineId], references: [id], onDelete: Restrict)
+}
