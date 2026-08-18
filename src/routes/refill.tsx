@@ -24,6 +24,7 @@ import {
   continueAsPatient,
   logoutPatient,
 } from '#/lib/refill/session.functions.ts'
+import { useProductPoll } from '#/lib/refill/useProductPoll.ts'
 
 export const Route = createFileRoute('/refill')({
   head: () => ({
@@ -39,6 +40,7 @@ export const Route = createFileRoute('/refill')({
 
 function Refill() {
   const data = Route.useLoaderData()
+  useProductPoll(data.screen === 'status')
 
   if (data.screen === 'picker') {
     return <PickerView patients={data.patients} />
@@ -357,7 +359,7 @@ function StatusView({ clinicName, patientName, order, repeats }: StatusViewProps
               displayId={order.displayId}
               clinicName={clinicName}
               readyAt={order.readyAt}
-              className="absolute -right-1 top-[38%] -translate-y-1/2 rotate-[-2deg]"
+              className="relative mt-4 max-w-full rotate-0 sm:absolute sm:-right-1 sm:top-[38%] sm:mt-0 sm:-translate-y-1/2 sm:max-w-[min(100%,280px)] sm:rotate-[-2deg]"
             />
           ) : null}
         </div>
