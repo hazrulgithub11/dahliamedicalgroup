@@ -17,11 +17,18 @@ const TRUST_BADGES = [
   { icon: GraduationCap, label: 'HRD Corp claimable training' },
 ]
 
+const TRUST_BADGE_DELAYS = [
+  'home-enter-delay-3',
+  'home-enter-delay-4',
+  'home-enter-delay-5',
+  'home-enter-delay-6',
+] as const
+
 function Home() {
   return (
     <main className="min-h-screen bg-white pb-20 text-neutral-900">
       {/* ── Trust badge strip (mobile only) ── */}
-      <div className="overflow-hidden border-b border-neutral-200 py-3 lg:hidden">
+      <div className="home-enter home-enter-rise home-enter-delay-2 overflow-hidden border-b border-neutral-200 py-3 lg:hidden">
         <div className="trust-marquee flex w-max">
           {[0, 1].map((copy) => (
             <div
@@ -45,7 +52,7 @@ function Home() {
 
       {/* ── Hero title section ── */}
       <section className="mx-auto max-w-[1240px] px-4 pb-6 pt-6 lg:flex lg:items-start lg:justify-between lg:gap-8 lg:px-6 lg:pb-8 lg:pt-10">
-        <h1 className="m-0 text-[clamp(36px,7vw,68px)] font-bold leading-[0.94] tracking-[-0.03em] text-black">
+        <h1 className="home-enter home-enter-rise home-enter-delay-2 m-0 text-[clamp(36px,7vw,68px)] font-bold leading-[0.94] tracking-[-0.03em] text-black">
           Inspiring Better Health
         </h1>
         {/* Trust list — desktop only, right of title */}
@@ -53,8 +60,11 @@ function Home() {
           className="mt-2 hidden space-y-3 text-[14px] text-neutral-500 lg:block"
           style={{ listStyle: 'none', padding: 0, margin: 0 }}
         >
-          {TRUST_BADGES.map(({ icon: Icon, label }) => (
-            <li key={label} className="flex items-center gap-2.5">
+          {TRUST_BADGES.map(({ icon: Icon, label }, index) => (
+            <li
+              key={label}
+              className={`home-enter home-enter-rise ${TRUST_BADGE_DELAYS[index]} flex items-center gap-2.5`}
+            >
               <Icon size={15} strokeWidth={1.75} className="flex-shrink-0 text-neutral-400" />
               {label}
             </li>
@@ -84,6 +94,7 @@ function Home() {
             Desktop: col 3,   row 1–2 (tall right) */}
         <article
           className={[
+            'home-enter home-enter-scale home-enter-delay-3',
             'relative overflow-hidden rounded-[24px] lg:rounded-[28px]',
             // mobile placement
             'col-span-2 row-start-1',
@@ -100,6 +111,7 @@ function Home() {
             Desktop: col 1–2, row 1 (wide top-left) */}
         <article
           className={[
+            'home-enter home-enter-rise home-enter-delay-4',
             'relative overflow-hidden rounded-[24px] lg:rounded-[28px]',
             // mobile placement
             'col-start-1 row-start-2 row-span-2',
@@ -142,6 +154,7 @@ function Home() {
             Desktop: col 1, row 2 */}
         <article
           className={[
+            'home-enter home-enter-rise home-enter-delay-5',
             'relative overflow-hidden rounded-[20px] lg:rounded-[24px]',
             // mobile placement
             'col-start-2 row-start-2',
@@ -181,6 +194,7 @@ function Home() {
             Desktop: col 2, row 2 */}
         <article
           className={[
+            'home-enter home-enter-rise home-enter-delay-6',
             'relative overflow-hidden rounded-[20px] lg:rounded-[24px]',
             // mobile placement
             'col-start-2 row-start-3',
